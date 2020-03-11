@@ -1,0 +1,18 @@
+.box{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    background-color: #fffdd0;
+
+}
+
+ul{
+ list-style: none;
+
+}
+
+img{
+	height: 350px;
+	width:300px;
+
+}

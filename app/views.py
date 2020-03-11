@@ -6,11 +6,10 @@ This file creates your application.
 """
 import os
 from app import app
-from flask import render_template, request, redirect, url_for, flash, session, abort
 from .forms import UploadForm
+from flask import render_template, request, redirect, url_for, flash, session, abort
 from werkzeug.utils import secure_filename
 
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 
 ###
@@ -25,7 +24,8 @@ def home():
 
 @app.route('/about/')
 def about():
-    """Render the website's about page."""
+    
+    #"""Render the website's about page."""
     return render_template('about.html', name="Mary Jane")
 
 
@@ -40,7 +40,8 @@ def upload():
     # Validate file upload on submit
     if request.method == 'POST':
         if imageForm.validate_on_submit():
-        # Get file data and save to your uploads folder
+            
+            # Get file data and save to your uploads folder
             image = imageForm.image.data
             filename = secure_filename(image.filename)
             image.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
@@ -71,8 +72,35 @@ def login():
 def logout():
     session.pop('logged_in', None)
     flash('You were logged out', 'success')
+    
     return redirect(url_for('home'))
 
+
+def get_uploaded_images():
+    rootdir = os.getcwd()
+    filenames = []
+    print(rootdir)
+    path = '/app/static/uploads'
+    for subdir,dirs,files in os.walk(rootdir + path):
+    
+        for file in files:
+            if file == ".gitkeep":
+                continue;
+            else:
+                filenames.append(file)
+
+    return filenames
+
+@app.route('/files')
+def files():
+
+    
+
+    files = get_uploaded_images()
+    
+    return render_template('files.html',filenames = files)
+
+        
 
 ###
 # The functions below should be applicable to all Flask apps.
